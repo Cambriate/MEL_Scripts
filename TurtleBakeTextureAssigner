@@ -1,0 +1,96 @@
+/*This script is written in Maya Embedded Language. It was created by Ivan Spalla and published on 9.8.2015. It is free for use under Creative Commons Licensing. It has been tested in Maya 2014. 
+
+Use this script once you have baked items in a scene using the TURTLE renderer within Maya. Please use the shape flag in the name of your bakes, as this script is heavily dependant on it. Select objects 
+that need to have textures applied, specificy the file folder in which your baked textures can be found, specificy the file prefix, and simply click Assign.
+
+Any questions can be directed to spallam42@gmail.com*/
+
+global string $textField1;
+global string $textField2;
+
+///CREATE UI//////////////////////////////////////////
+string $window = `window -title "Mass Baked Texture Assignment"
+-iconName "MBTA"
+-widthHeight 500 500`;
+columnLayout -adjustableColumn true;
+text -al "left" -label "Select all objects which have baked textures that have yet to be assigned and name the folder they have been saved into below." -ww true;
+global string $textField1;
+global string $textField2;
+$textField1 = `textFieldGrp -label "turtle\\bakedTextures\\" -text "InsertFileFolderNameHere"`;
+text -label "Type the file prefix which appears before the shape name on the image file; It should be similar to 'baked_beauty_'" - al "left" -ww true;
+$textField2 = `textFieldGrp -text "InsertFilePrefixHere"`;
+button -label "Assign" -command "AssignTextures()";
+//button -label "Print" -command "TestPrint()";
+button -label "Close" -command ("deleteUI -window " + $window);
+showWindow $window;
+//////////////////////////END UI///////////////////////////////////////
+
+
+
+proc AssignTextures(){
+    global string $textField1;
+    global string $textField2;
+    string $DefinedPath = `textFieldGrp -q -text $textField1`;
+    string $DefinedPrefix = `textFieldGrp -q -text $textField2`;
+    string $array[] = `ls -sl`;
+    
+    string $MatName;
+    string $TexName;
+    string $ShapeNode;
+    string $TexPath;
+    string $TB = "turtle\\bakedTextures\\";
+    string $Slash = "\\";
+    
+    for ($item in $array)
+    {
+        
+        ///////////FIND THE SHAPE NODE//////////////////
+        string $shapes[] = `listRelatives -s -path $item`;
+        
+        for ($shape in $shapes){
+            
+           $ShapeNode = $shape;
+            
+        }
+            
+        
+        ///////////////CREATE THE NAME FOR THE NEW MATERIAL/////////////////////
+        $MatName =  $item + "_MAT";
+       // print $MatName;
+        
+        ///////////////CREATE THE TEX NAME///////////////////
+        $TexName = $item + "_TEX";
+        $TexPath = $TB + $DefinedPath + $Slash +$DefinedPrefix + $ShapeNode + ".tga";
+        
+        
+        if( `objExists $MatName` ) {
+            //IF THE MATERIAL ALREADY EXISTS, DELETE IT///////////////////////
+            select $MatName;    
+            delete;
+            //print "Deleted old Mat \n";
+            
+        } else {
+           //do nothing
+        }
+        
+                if( `objExists $MatName` ) {
+            //IF THE TEX NAME ALREADY EXISTS, DELETE IT///////////////////////
+            select $TexName;    
+            delete;
+            //print "Deleted old Tex File \n";
+            
+        } else {
+           //do nothing
+        }
+        
+         /////////////////CREATE, NAME, and ASSIGN THE NEW MATERIAL/////////////////
+         select -r $item;
+         shadingNode -asShader lambert -n $MatName;
+         assignSG $MatName $item;
+         /////////////////ASSIGN TEXTURE to the COLOR NODE///////////////////////
+         string $fileNode = `shadingNode -asTexture file -name $TexName`;
+         connectAttr -f ( $fileNode + ".outColor" ) ( $MatName + ".color" );
+    
+         setAttr -type "string" ( $fileNode + ".fileTextureName" ) $TexPath;
+    }
+}
