@@ -1,0 +1,553 @@
+/*
+* Forearm For Mixamo Version 1.3
+* Created by Skeleton Crew:
+* Edward Dang, Adam Hargett, Sarah Mattox, and M Ivan Spalla
+* 2/23/14
+* spallam42@gmail.com
+*
+* DESCRIPTION: This script will add forearm joints with appropriate weight to Mixamo rigged biped characters
+* Made with Maya 2014. Run this script before running Mixamo's control rig python script
+*
+* NOTES:
+*	Have not tested on versions of Maya lower than Maya 2014
+*	Make sure the model is exported out of Mixamo in a T-pose
+*
+* To Use:
+*	Run the script
+*
+* Changelog:
+*	Changes in Version 1.2 
+*		Updated: 3/22/2014
+*		Fixed bug with right arm weight painting
+*
+*	Changes in Version 1.2 
+*		Updated: 3/10/2014
+*		Created a more gradual change of influence for forearm joint. There are now 8 “slices” between elbow and wrist (previously 6 “slices”)
+*		Cleaned up script and added notes
+*
+*/
+
+
+
+select -cl;
+
+//
+//Add Joint in Left Arm
+//
+select -r mixamorig:LeftForeArm ;
+duplicate -rr;
+select -r LeftHand;
+select -hi;
+select -d LeftHand ;
+doDelete;
+select -r LeftForeArm ;
+setAttr "LeftForeArm.scaleZ" .7;
+setAttr "LeftForeArm.scaleX" .7;
+setAttr "LeftForeArm.scaleY" .7;
+makeIdentity -apply true -t 0 -r 0 -s 1 -n 0;
+select -r LeftHand ;
+parent -w;
+select -r LeftHand ;
+select -add mixamorig:LeftForeArm ;
+parent;
+select -r LeftForeArm ;
+doDelete;
+rename "LeftHand" "mixamorig:LeftWrist";
+connectAttr -f mixamorig:LeftHand.rotateY mixamorig:LeftWrist.rotateY;
+
+//
+//Add joint in Right Arm
+//
+select -r mixamorig:RightForeArm ;
+duplicate -rr;
+select -r RightHand;
+select -hi;
+select -d RightHand ;
+doDelete;
+select -r RightForeArm ;
+setAttr "RightForeArm.scaleZ" .7;
+setAttr "RightForeArm.scaleX" .7;
+setAttr "RightForeArm.scaleY" .7;
+makeIdentity -apply true -t 0 -r 0 -s 1 -n 0;
+select -r RightHand ;
+parent -w;
+select -r RightHand ;
+select -add mixamorig:RightForeArm ;
+parent;
+select -r RightForeArm ;
+doDelete;
+rename "RightHand" "mixamorig:RightWrist";
+connectAttr -f mixamorig:RightHand.rotateY mixamorig:RightWrist.rotateY;
+
+//change out meshes and copy weights
+string $meshes[]=`ls -type "mesh"`;
+int $meshes_count = size($meshes);
+int $nameCount = 1;
+
+for ($i = 0; $i <= ($meshes_count - 1); $i)
+{
+	//check to see if all meshes in scene have a polycount. Mixamo sometimes adds an empty mesh to scene.
+	$count = `polyEvaluate -v $meshes[$i]`;
+	if($count[0] != 0){
+	    select -r $meshes[$i];
+	    duplicate -rr -n "new_mesh";
+
+	    //Bind new duplicated meshes to Mixamo rig
+	    skinCluster -dr 1.0 -mi 5 -nw 1 mixamorig:Hips new_mesh;
+	    select -r $meshes[$i];
+	    select -add "new_mesh";
+
+	    //Copy the skin weights from original meshes created by Mixamo onto new duplicated meshes
+	    copySkinWeights  -noMirror -surfaceAssociation closestComponent -influenceAssociation oneToOne;
+	    rename "new_mesh" ("new_mesh_" + $nameCount);
+	    $nameCount ++;
+	    $i = $i + 2;
+	}
+	else{
+	    $i ++;
+	}
+}
+
+//Delete original meshes
+string $transforms[] = `ls -tr`;
+string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+select -r $polyMeshes;
+select -d ("new*"); 
+doDelete;
+
+//
+//Get distance between Left hand joint and forearm joint
+//
+distanceDimension -sp -2.729297 0.638392 -0.0137946 -ep 2.740297 0.707261 0.0796441 ;
+select -r mixamorig:LeftHand;
+select -tgl locator2 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1 ;
+select -r mixamorig:LeftForeArm;
+select -tgl locator1 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+
+float $distance = `getAttr distanceDimension1.distance`;
+
+//
+//Add Distance locators Left Hand
+//
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+rename "locator3" "point1";
+rename "locator4" "point2";
+rename "locator5" "point3";
+rename "locator6" "point4";
+rename "locator7" "point5";
+rename "locator8" "point6";
+rename "locator9" "point7";
+
+//Move locators to Left Hand Joint position
+select -r mixamorig:LeftHand;
+select -add point1 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point1_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point2 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point2_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point3 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point3_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point4 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point4_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point5 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point5_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point6 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point6_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:LeftHand;
+select -add point7 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point7_parentConstraint1 ;
+doDelete;
+
+//Move locators even distance between Left Hand Joint and Left Forearm Joint
+float $pointValue = $distance / (-8);
+select point1;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue * 2;
+select point2;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 2 * 3;
+select point3;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 3 * 4;
+select point4;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 4 * 5;
+select point5;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 5 * 6;
+select point6;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 6 * 7;
+select point7;
+xform -r -t $pointValue 0 0;
+
+//
+//Get distance between Right hand joint and forearm joint
+//
+distanceDimension -sp -2.729297 0.638392 -0.0137946 -ep 2.740297 0.707261 0.0796441 ;
+select -r mixamorig:RightHand;
+select -tgl locator3 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1 ;
+select -r mixamorig:RightForeArm;
+select -tgl locator4 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+
+float $distanceOne = `getAttr distanceDimension1.distance`;
+
+//
+//Add Distance locators Right Hand
+//
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+spaceLocator -p 0 0 0;
+rename "locator5" "point8";
+rename "locator6" "point9";
+rename "locator7" "point10";
+rename "locator8" "point11";
+rename "locator9" "point12";
+rename "locator10" "point13";
+rename "locator11" "point14";
+
+//Move locators to Right Hand Joint position
+select -r mixamorig:RightForeArm;
+select -add point8 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point8_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point9 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point9_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point10 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point10_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point11 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point11_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point12 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point12_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point13 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point13_parentConstraint1 ;
+doDelete;
+
+select -r mixamorig:RightForeArm;
+select -add point14 ;
+doCreateParentConstraintArgList 1 { "0","0","0","0","0","0","0","1","","1" };
+parentConstraint -weight 1;
+select -r point14_parentConstraint1 ;
+doDelete;
+
+//Move locators even distance between Right Hand Joint and Right Forearm Joint
+float $pointValue = $distanceOne / (-8);
+select point8;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue * 2;
+select point9;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 2 * 3;
+select point10;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 3 * 4;
+select point11;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 4 * 5;
+select point12;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 5 * 6;
+select point13;
+xform -r -t $pointValue 0 0;
+
+$pointValue = $pointValue / 6 * 7;
+select point14;
+xform -r -t $pointValue 0 0;
+
+//
+//SkinClusters into an Array For Left Arm
+//
+string $skins[]=`ls -type "skinCluster"`;
+int $skins_count = size($skins);
+
+for($i = 0; $i < $skins_count; $i++){
+    select -cl  ;
+	skinCluster -e -selectInfluenceVerts mixamorig:LeftForeArm $skins[$i];
+   	//Vertex name
+	string $vertexTemp[] = `ls -sl -fl`;
+	int $vertexTempSize = size($vertexTemp);
+
+	if($vertexTempSize > 2){
+	    //X Value of Vertex
+	    float $XYZ[] = `xform -q -ws -t`;
+	    int $XYZ_count = size($XYZ);
+	    int $remainder = ($XYZ_count / 3);
+	    float $X_values[] = {0.0};
+
+	    for ($j = 0; $j < $remainder; $j++){
+	        int $temp = 3 * $j;
+	        $X_values[$j] = $XYZ[$temp];
+	    }
+
+	    //call function with $skins[$i], $X_values[], $vertexTemp[]
+	    mySkinPaint($skins[$i], $X_values, $vertexTemp);
+	}
+}
+
+//
+//SkinClusters into an Array for Right Arm
+//
+for($i = 0; $i < $skins_count; $i++){
+    select -cl  ;
+	skinCluster -e -selectInfluenceVerts mixamorig:RightForeArm $skins[$i];
+	//Vertex name
+	string $vertexTempR[] = `ls -sl -fl`;
+	int $vtrs = size($vertexTempR);
+
+  	 if($vtrs > 2){
+    	//X Value of Vertex
+	    float $XYZR[] = `xform -q -ws -t `;
+	    int $XYZR_count = size($XYZR);
+	    int $remainderR = ($XYZR_count / 3);
+	    float $X_valuesR[] = {0.0};
+    
+	    for ($j = 0; $j < $remainderR; $j++){
+	        int $temp = 3 * $j;
+	        $X_valuesR[$j] = $XYZR[$temp];
+	    }
+
+	    //call function with $skins[$i], $X_values[], $vertexTemp[]
+	    mySkinPaintRight($skins[$i], $X_valuesR, $vertexTempR);
+	}
+}
+
+//Delete Locators
+select -r point14 point13 point12 point11 point10 point9 point8 point7 point6 distanceDimension2 locator4 locator3 point5 point4 point3 point2 point1 distanceDimension1 locator2 locator1 ;
+doDelete;
+
+//
+//Function to Paint Weights For Left Arm
+//
+global proc mySkinPaint (string $name, float $x_coords[], string $vertices[]) {
+	//        
+	//Place All X Values Within Elbow and Hand into an Array Left Hand
+	//
+	select -r locator1 ;
+	float $position1[] = `xform -q -ws -t `;
+
+	select -r locator2 ;
+	float $position2[] = `xform -q -ws -t `;
+
+	int $X_count = size($x_coords);
+	float $valuesX[] = {0.0};
+	string $vertexNames[];
+	int $new_temp = 0;
+
+	for($i = 0; $i < $X_count ; $i++){
+		if($position1[0] < $x_coords[$i] && $position2[0] > $x_coords[$i]){
+			$valuesX[$new_temp] = $x_coords[$i];
+			$vertexNames[$new_temp] = $vertices[$i];
+			$new_temp++;
+		}
+	}
+
+	//
+	//Painting the weights
+	//
+	select -r point1 ;
+	float $point1_pos[] = `xform -q -ws -t `;
+	select -r point2 ;
+	float $point2_pos[] = `xform -q -ws -t `;
+	select -r point3 ;
+	float $point3_pos[] = `xform -q -ws -t `;
+	select -r point4 ;
+	float $point4_pos[] = `xform -q -ws -t `;
+	select -r point5 ;
+	float $point5_pos[] = `xform -q -ws -t `;
+	select -r point6 ;
+	float $point6_pos[] = `xform -q -ws -t `;
+	select -r point7 ;
+	float $point7_pos[] = `xform -q -ws -t `;
+
+	int $valuesName_count = size($vertexNames);
+
+	//Add influence to Left Wrist Joint. Position 2 is Wrist, Position 3 is Forearm, point 1 – 7 begin near Wrist
+	for($i = 0; $i < $valuesName_count ; $i++){
+		if($point1_pos[0] < $valuesX[$i] && $position2[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.4 $name $vertexNames[$i];
+		}
+		if($point2_pos[0] < $valuesX[$i] && $point1_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.35 $name $vertexNames[$i];
+		}
+		if($point3_pos[0] < $valuesX[$i] && $point2_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.3 $name $vertexNames[$i];
+		}
+		if($point4_pos[0] < $valuesX[$i] && $point3_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.25 $name $vertexNames[$i];
+		}
+		if($point5_pos[0] < $valuesX[$i] && $point4_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.1 $name $vertexNames[$i];
+		}
+		if($point6_pos[0] < $valuesX[$i] && $point5_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.075 $name $vertexNames[$i];
+		}
+		if($point7_pos[0] < $valuesX[$i] && $point6_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.05 $name $vertexNames[$i];
+		}
+		if($position1[0] < $valuesX[$i] && $point7_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:LeftWrist 0.0 $name $vertexNames[$i];
+		}
+		$new_temp++;
+	}
+}
+
+//
+//Function to Paint Weights for Right Arm
+//
+global proc mySkinPaintRight (string $name, float $x_coords[], string $vertices[]) {
+	// 
+	//Place All X Values Within Elbow and Hand into an Array Right Hand
+	//
+	select -r locator3 ;
+	float $position3[] = `xform -q -ws -t `;
+
+	select -r locator4 ;
+	float $position4[] = `xform -q -ws -t `;
+
+	int $X_count = size($x_coords);
+	float $valuesX[] = {0.0};
+	string $vertexNames[];
+	int $new_temp = 0;
+
+	for($i = 0; $i < $X_count ; $i++){
+		if($position3[0] < $x_coords[$i] && $position4[0] > $x_coords[$i]){
+			$valuesX[$new_temp] = $x_coords[$i];
+			$vertexNames[$new_temp] = $vertices[$i];
+			$new_temp++;
+		}
+	}
+
+	//
+	//Painting the weights
+	//
+	select -r point8;
+	float $point8_pos[] = `xform -q -ws -t `;
+	select -r point9 ;
+	float $point9_pos[] = `xform -q -ws -t `;
+	select -r point10 ;
+	float $point10_pos[] = `xform -q -ws -t `;
+	select -r point11 ;
+	float $point11_pos[] = `xform -q -ws -t `;
+	select -r point12 ;
+	float $point12_pos[] = `xform -q -ws -t `;
+	select -r point13 ;
+	float $point13_pos[] = `xform -q -ws -t `;
+	select -r point14 ;
+	float $point14_pos[] = `xform -q -ws -t `;
+
+	int $valuesName_count = size($valuesX);
+
+	//Add influence to Right Wrist Joint. Position 3 is Wrist, Position 4 is Forearm, point 8 – 14 begin near Forearm
+	for($i = 0; $i < $valuesName_count ; $i++){
+		if($point8_pos[0] < $valuesX[$i] && $position4[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.0 $name $vertexNames[$i];
+		}
+		if($point9_pos[0] < $valuesX[$i] && $point8_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.05 $name $vertexNames[$i];
+		}
+		if($point10_pos[0] < $valuesX[$i] && $point9_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.075 $name $vertexNames[$i];
+		}
+		if($point11_pos[0] < $valuesX[$i] && $point10_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.1 $name $vertexNames[$i];
+		}
+		if($point12_pos[0] < $valuesX[$i] && $point11_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.25 $name $vertexNames[$i];
+		}
+		if($point13_pos[0] < $valuesX[$i] && $point12_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.3 $name $vertexNames[$i];
+		}
+		if($point14_pos[0] < $valuesX[$i] && $point13_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.35 $name $vertexNames[$i];
+		}
+		if($position3[0] < $valuesX[$i] && $point14_pos[0] > $valuesX[$i]){
+			skinPercent -tv mixamorig:RightWrist 0.4 $name $vertexNames[$i];
+		}
+		$new_temp++;
+	}
+}
