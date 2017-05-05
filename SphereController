@@ -1,0 +1,47 @@
+//Full Sphere - Possibly good for IK handles, heel controllers, Anything to move and not rotate
+
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1;
+rename "nurbsCircle1" "IKSphereShape_1";
+duplicate -rr;
+setAttr "IKSphereShape_2.rotateZ" 45;
+duplicate -rr;
+setAttr "IKSphereShape_3.rotateZ" -45;
+duplicate -rr;
+setAttr "IKSphereShape_4.rotateZ" 90;
+duplicate -rr;
+setAttr "IKSphereShape_5.rotateX" 90;
+duplicate -rr;
+setAttr "IKSphereShape_6.rotateY" -45;
+duplicate -rr;
+setAttr "IKSphereShape_7.rotateY" 45;
+duplicate -rr;
+setAttr "IKSphereShape_8.rotateX" 45;
+duplicate -rr;
+setAttr "IKSphereShape_9.rotateX" -45;
+select -cl;
+
+//create null group
+group -em; xform -os -piv 0 0 0;
+select -r null1 ;
+rename "null1" "IK_Sphere_Cntrl";
+
+//cleanpieces
+select -r IKSphereShape_1 IKSphereShape_2 IKSphereShape_3 IKSphereShape_4 IKSphereShape_5 IKSphereShape_6 IKSphereShape_7 IKSphereShape_8 IKSphereShape_9 ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//add pieces
+select -r IKSphereShape_Shape1 ;
+select -add IKSphereShape_Shape2 ;
+select -add IKSphereShape_Shape3 ;
+select -add IKSphereShape_Shape4 ;
+select -add IKSphereShape_Shape5 ;
+select -add IKSphereShape_Shape6 ;
+select -add IKSphereShape_Shape7 ;
+select -add IKSphereShape_Shape8 ;
+select -add IKSphereShape_Shape9 ;
+select -add IK_Sphere_Cntrl ;
+parent -r -s;
+
+//cleanup
+select -r IKSphereShape_1 IKSphereShape_2 IKSphereShape_3 IKSphereShape_4 IKSphereShape_5 IKSphereShape_6 IKSphereShape_7 IKSphereShape_8 IKSphereShape_9 ;
+doDelete;
