@@ -1,0 +1,53 @@
+//create hand shape
+PencilCurveTool;
+curve -name "r_hand_cntrl" -d 3 -p -1.709104 0 0.0252995 -p -1.843275 0 -0.124215 -p -2.184243 0 -0.468173 -p -2.603304 0 -1.055495 -p -2.844249 0 -1.732926 -p -2.380542 0 -2.423829 -p -2.015434 0 -2.027973 -p -1.612334 0 -1.424056 -p -1.611987 0 -2.285234 -p -1.82211 0 -2.700054 -p -1.762746 0 -3.33814 -p -1.84733 0 -4.053303 -p -1.440447 0 -4.943963 -p -0.291623 0 -5.449081 -p 0.721119 0 -5.047873 -p 1.423132 0 -4.54203 -p 1.938442 0 -3.902571 -p 2.292709 0 -3.082102 -p 2.261486 0 -2.115352 -p 2.151915 0 -1.421099 -p 1.835971 0 -0.841875 -p 1.562843 0 -0.374781 -p 1.140716 0 0.129764 -p 0.663674 0 0.981395 -p -0.594704 0 0.965873 -p -1.227397 0 0.674405 -p -1.71458 0 -0.272609 -p -1.710951 0 0.000687624 -p -1.709104 0 0.0252995 -k 0 -k 0 -k 0 -k 0.838296 -k 2.023826 -k 2.963542 -k 3.840489 -k 4.242687 -k 5.043779 -k 5.663874 -k 6.613416 -k 7.282865 -k 8.209796 -k 9.637827 -k 10.997364 -k 13.034555 -k 13.806996 -k 14.611392 -k 16.437871 -k 17.364802 -k 18.627245 -k 19.318138 -k 20.104192 -k 20.876634 -k 22.083226 -k 23.948495 -k 25.02006 -k 25.897008 -k 26 -k 26 -k 26 ;
+// clean up shape
+select -r r_hand_cntrl;
+select -r r_hand_cntrl.cv[26] ;
+doDelete;
+//add custom keyable attributes to controller
+addAttr -ln "AllSpread"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.AllSpread;
+addAttr -ln "Fist"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.Fist;
+addAttr -ln "Point"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.Point;
+addAttr -ln "PinkyCurl"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.PinkyCurl;
+addAttr -ln "RingCurl"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.RingCurl;
+addAttr -ln "MiddleCurl"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.MiddleCurl;
+addAttr -ln "PointerCurl"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.PointerCurl;
+addAttr -ln "ThumbCurl"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.ThumbCurl;
+addAttr -ln "PinkyLR"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.PinkyLR;
+addAttr -ln "RingLR"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.RingLR;
+addAttr -ln "MiddleLR"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.MiddleLR;
+addAttr -ln "PointerLR"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.PointerLR;
+addAttr -ln "ThumbLR"  -at double  -min -10 -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.ThumbLR;
+addAttr -ln "PinkyCup"  -at double  -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.PinkyCup;
+addAttr -ln "ThumbCup"  -at double  -max 10 -dv 0 |r_hand_cntrl;
+setAttr -e-keyable true |r_hand_cntrl.ThumbCup;
+//create the left hand control
+select -r r_hand_cntrl ;
+duplicate -rr;
+setAttr "r_hand_cntrl1.scaleX" -1;
+rename "r_hand_cntrl1" "l_hand_cntrl";
+select -r r_hand_cntrl ;
+setAttr "r_hand_cntrl.rotateY" 90;
+setAttr "r_hand_cntrl.translateX" -10;
+select -r l_hand_cntrl ;
+setAttr "l_hand_cntrl.translateX" 10;
+setAttr "l_hand_cntrl.rotateY" -90;
+select -tgl r_hand_cntrl ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+
