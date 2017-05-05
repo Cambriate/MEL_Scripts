@@ -1,0 +1,14 @@
+//Pole Vector Controllers, Arked plus shape (+)
+
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 16 -ch 1 -n "PoleVector_Cntrl";
+select -r PoleVector_Cntrl ;
+select -r PoleVector_Cntrl.cv[3] PoleVector_Cntrl.cv[15] PoleVector_Cntrl.cv[7] PoleVector_Cntrl.cv[11];
+scale -ws -r -p 0cm 0cm 0cm 0.071864 0.071864 0.071864 ;
+move -r 0 0.310846 0 ;
+move -r 0 0.193828 0 ;
+select -r PoleVector_Cntrl.cv[1] PoleVector_Cntrl.cv[13] PoleVector_Cntrl.cv[9] PoleVector_Cntrl.cv[5];
+move -r 0 -0.152905 0 ;
+move -r 0 -0.0545379 0 ;
+setAttr "PoleVector_Cntrl.rotateX" 90;
+select -r PoleVector_Cntrl ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
