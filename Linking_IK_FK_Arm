@@ -1,0 +1,95 @@
+//Link connections - HIP
+connectAttr -f L_FK_Hip_Jnt.rotateX L_Hip_Blend.color1R;
+connectAttr -f L_FK_Hip_Jnt.rotateY L_Hip_Blend.color1G;
+connectAttr -f L_FK_Hip_Jnt.rotateZ L_Hip_Blend.color1B;
+
+connectAttr -f L_IK_Hip_Jnt.rotateX L_Hip_Blend.color2R;
+connectAttr -f L_IK_Hip_Jnt.rotateY L_Hip_Blend.color2G;
+connectAttr -f L_IK_Hip_Jnt.rotateZ L_Hip_Blend.color2B;
+
+connectAttr -f L_Hip_Blend.outputR L_Bind_Hip_Jnt.rotateX;
+connectAttr -f L_Hip_Blend.outputG L_Bind_Hip_Jnt.rotateY;
+connectAttr -f L_Hip_Blend.outputB L_Bind_Hip_Jnt.rotateZ;
+
+//Link connections - KNEE
+connectAttr -f L_FK_Knee_Jnt.rotateX L_Knee_Blend.color1R;
+connectAttr -f L_FK_Knee_Jnt.rotateY L_Knee_Blend.color1G;
+connectAttr -f L_FK_Knee_Jnt.rotateZ L_Knee_Blend.color1B;
+
+connectAttr -f L_IK_Knee_Jnt.rotateX L_Knee_Blend.color2R;
+connectAttr -f L_IK_Knee_Jnt.rotateY L_Knee_Blend.color2G;
+connectAttr -f L_IK_Knee_Jnt.rotateZ L_Knee_Blend.color2B;
+
+connectAttr -f L_Knee_Blend.outputR L_Bind_Knee_Jnt.rotateX;
+connectAttr -f L_Knee_Blend.outputG L_Bind_Knee_Jnt.rotateY;
+connectAttr -f L_Knee_Blend.outputB L_Bind_Knee_Jnt.rotateZ;
+
+//Link connections - ANKLE
+connectAttr -f L_FK_Ankle_Jnt.rotateX L_Ankle_Blend.color1R;
+connectAttr -f L_FK_Ankle_Jnt.rotateY L_Ankle_Blend.color1G;
+connectAttr -f L_FK_Ankle_Jnt.rotateZ L_Ankle_Blend.color1B;
+
+connectAttr -f L_IK_Ankle_Jnt.rotateX L_Ankle_Blend.color2R;
+connectAttr -f L_IK_Ankle_Jnt.rotateY L_Ankle_Blend.color2G;
+connectAttr -f L_IK_Ankle_Jnt.rotateZ L_Ankle_Blend.color2B;
+
+connectAttr -f L_Ankle_Blend.outputR L_Bind_Ankle_Jnt.rotateX;
+connectAttr -f L_Ankle_Blend.outputG L_Bind_Ankle_Jnt.rotateY;
+connectAttr -f L_Ankle_Blend.outputB L_Bind_Ankle_Jnt.rotateZ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Link connections - BALL
+connectAttr -f L_FK_Ball_Jnt.rotateX L_Ball_Blend.color1R;
+connectAttr -f L_FK_Ball_Jnt.rotateY L_Ball_Blend.color1G;
+connectAttr -f L_FK_Ball_Jnt.rotateZ L_Ball_Blend.color1B;
+
+connectAttr -f L_IK_Ball_Jnt.rotateX L_Ball_Blend.color2R;
+connectAttr -f L_IK_Ball_Jnt.rotateY L_Ball_Blend.color2G;
+connectAttr -f L_IK_Ball_Jnt.rotateZ L_Ball_Blend.color2B;
+
+connectAttr -f L_Ball_Blend.outputR L_Bind_Ball_Jnt.rotateX;
+connectAttr -f L_Ball_Blend.outputG L_Bind_Ball_Jnt.rotateY;
+connectAttr -f L_Ball_Blend.outputB L_Bind_Ball_Jnt.rotateZ;
+
+//Link connections - TOE
+connectAttr -f L_FK_Toe_Jnt.rotateX L_Toe_Blend.color1R;
+connectAttr -f L_FK_Toe_Jnt.rotateY L_Toe_Blend.color1G;
+connectAttr -f L_FK_Toe_Jnt.rotateZ L_Toe_Blend.color1B;
+
+connectAttr -f L_IK_Toe_Jnt.rotateX L_Toe_Blend.color2R;
+connectAttr -f L_IK_Toe_Jnt.rotateY L_Toe_Blend.color2G;
+connectAttr -f L_IK_Toe_Jnt.rotateZ L_Toe_Blend.color2B;
+
+connectAttr -f L_Toe_Blend.outputR L_Bind_Toe_Jnt.rotateX;
+connectAttr -f L_Toe_Blend.outputG L_Bind_Toe_Jnt.rotateY;
+connectAttr -f L_Toe_Blend.outputB L_Bind_Toe_Jnt.rotateZ;
+
+//Link connections - BALLPROPER
+connectAttr -f L_FK_BallPROPER_Jnt.rotateX L_BallPROPER_Blend.color1R;
+connectAttr -f L_FK_BallPROPER_Jnt.rotateY L_BallPROPER_Blend.color1G;
+connectAttr -f L_FK_BallPROPER_Jnt.rotateZ L_BallPROPER_Blend.color1B;
+
+connectAttr -f L_IK_BallPROPER_Jnt.rotateX L_BallPROPER_Blend.color2R;
+connectAttr -f L_IK_BallPROPER_Jnt.rotateY L_BallPROPER_Blend.color2G;
+connectAttr -f L_IK_BallPROPER_Jnt.rotateZ L_BallPROPER_Blend.color2B;
+
+connectAttr -f L_BallPROPER_Blend.outputR L_Bind_BallPROPER_Jnt.rotateX;
+connectAttr -f L_BallPROPER_Blend.outputG L_Bind_BallPROPER_Jnt.rotateY;
+connectAttr -f L_BallPROPER_Blend.outputB L_Bind_BallPROPER_Jnt.rotateZ;
+
+
+
+
+
+
