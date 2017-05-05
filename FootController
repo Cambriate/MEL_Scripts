@@ -1,0 +1,88 @@
+//make overall shape
+//make toe shapes
+circle -ch on -o on -nr 0 1 0 -r 0.853892 -n "bigtoe_crv";
+move -r -1.833801 0 -4.329808 ;
+scale -r 0.8 1 1 ;
+duplicate -rr;
+rename "bigtoe_crv1" "toe1";
+scale -r 0.707094 0.707094 0.707094 ;
+move -r 1.280443 0 -0.403102 ;
+duplicate -rr;
+move -r 1.269663 0 0.0208141 ;
+duplicate -rr;
+move -r 1.123964 0 0.291398 ;
+scale -r 0.902837 0.902837 0.902837 ;
+duplicate -rr;
+move -r 1.061521 0 0.85338 ;
+scale -r 1 1 0.834964 ;
+
+//make foot shape
+circle -ch on -o on -nr 0 1 0 -r 4.061695 -n "footbase";
+select -r footbase.cv[3] footbase.cv[7] ;
+scale -r -p -0.0575196cm 0cm 0.10253cm 0 1 1 ;
+scale -r -p -0.0575196cm 0cm 0.10253cm 0.477778 1 1 ;
+select -r footbase.cv[4:6] ;
+scale -r -p -0.0575196cm 0cm 3.944499cm 0.588889 1 1 ;
+select -r footbase.cv[3] footbase.cv[7] ;
+scale -r -p -0.0575196cm 0cm 0.10253cm 0.688889 1 1 ;
+select -r footbase.cv[0] footbase.cv[2] ;
+move -r -os -wd 0 0 0.819918 ;
+select -r footbase.cv[0:2] ;
+move -r 0.662242 0 -0.252283 ;
+select -r footbase.cv[3] footbase.cv[7] ;
+move -r 0.409959 0 0.157677 ;
+select -r footbase.cv[4:6] ;
+move -r -0.346889 0 -0.220747 ;
+select -r footbase.cv[2] ;
+move -r -os -wd -0.126141 0 0 ;
+select -r footbase.cv[0] ;
+move -r -os -wd -0.126141 0 0 ;
+move -r -os -wd 0 0 0.283818 ;
+
+//create null group for foot controller
+group -em; xform -os -piv 0 0 0;
+select -r null1 ;
+rename "null1" "r_foot_cntrl";
+//clean pieces
+select -r bigtoe_crv toe1 toe2 toe3 toe4 footbase ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+//add pieces
+select -r bigtoe_crvShape ;
+select -add toe1Shape ;
+select -add toe2Shape ;
+select -add toe3Shape ;
+select -add toe4Shape ;
+select -add footbaseShape ;
+select -add r_foot_cntrl ;
+parent -r -s;
+
+//cleanup
+select -r bigtoe_crv toe1 toe2 toe3 toe4 footbase ;
+doDelete;
+
+//add attributes
+select -r r_foot_cntrl ;
+addAttr -ln "FootRoll"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.FootRoll;
+addAttr -ln "ToeUD"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.ToeUD;
+addAttr -ln "HeelPivot"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.HeelPivot;
+addAttr -ln "BallPivot"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.BallPivot;
+addAttr -ln "BallTwist"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.BallTwist;
+addAttr -ln "ToePivotUD"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.ToePivotUD;
+addAttr -ln "ToePivotLR"  -at double  -min -10 -max 10 -dv 0 |r_foot_cntrl;
+setAttr -e-keyable true |r_foot_cntrl.ToePivotLR;
+
+//duplicate and position controller
+setAttr "r_foot_cntrl.rotateY" 180;
+setAttr "r_foot_cntrl.translateX" -4;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+duplicate -rr;
+rename "r_foot_cntrl1" "l_foot_cntrl";
+setAttr "l_foot_cntrl.scaleX" -1;
+setAttr "l_foot_cntrl.translateX" 8;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
