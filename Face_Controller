@@ -1,0 +1,314 @@
+//Nose (Sides L and R) 
+curve -d 1 -p 0 0 1 -p 0 0 -2 -p 1 0 0 -k 0 -k 1 -k 2 -n "uppernostril";
+curve -d 3 -p 0 0 1 -p 0.416667 0 1.083333 -p 1.25 0 1.25 -p 1.083333 0 0.416667 -p 1 0 0 -k 0 -k 0 -k 0 -k 1 -k 2 -k 2 -k 2 -n "roundednose";
+select -r roundednose ;
+select -r roundednose.cv[2] ;
+move -r -xz -0.25 -0.25 ;
+select -r roundednose.cv[1] ;
+move -r 0 0 -0.0874476 ;
+select -r roundednose.cv[3] ;
+move -r -0.0582984 0 -0.0437238 ;
+select -r roundednose.cv[2] ;
+move -r -0.116597 0 -0.116597 ;
+move -r 0 0 -0.0145746 ;
+move -r 0 0 -0.0437238 ;
+move -r -0.0874476 0 -0.0874476 ;
+select -cl  ;
+group -em; xform -os -piv 0 0 0;
+select -r null1 ;
+rename "null1" "R_Nose";
+select -r curveShape1 ;
+select -add curveShape2 ;
+select -add R_Nose ;
+parent -r -s;
+select -r uppernostril roundednose ;
+doDelete;
+setAttr "R_Nose.translateX" .25;
+select -r R_Nose;
+duplicate -rr;
+setAttr "R_Nose1.translateX" -0.25;
+setAttr "R_Nose1.scaleX" -1;
+rename "R_Nose1" "L_Nose";
+select -r L_Nose ;
+select -tgl R_Nose ;
+move -r 0 0 -3.044138 ;
+scale -ws -r 0.740924 0.740924 0.740924 ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Mouth Corner (R and L)
+curve -d 1 -p 0 0 0 -p 2 0 -1 -p 2 0 1 -p 0 0 0 -k 0 -k 1 -k 2 -k 3 -n "R_MouthCorner";
+scale -ws -r 0.591373 0.591373 0.591373 ;
+setAttr "R_MouthCorner.translateX" 2.078;
+select -r R_MouthCorner ;
+duplicate -rr;
+rename "R_MouthCorner1" "L_MouthCorner";
+setAttr "L_MouthCorner.translateX" -2.078;
+setAttr "L_MouthCorner.scaleX" -0.591;
+select -add R_MouthCorner ;
+select -add L_MouthCorner ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Upper Lip
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 16 -ch 1 -n "UpperLip"; objectMoveCommand;
+select -r UpperLip.cv[0:15] ;
+scale -ws -r -p 0cm 0cm 0cm 2.041121 1 1 ;
+select -r UpperLip.cv[1] ;
+move -r 0 0 0.842066 ;
+select -r UpperLip.cv[0] UpperLip.cv[2] ;
+select -cl  ;
+select -r UpperLip.cv[0] UpperLip.cv[2] ;
+scale -ws -r -p 0cm 0cm -0.947932cm 0.441121 1 1 ;
+move -r 0 0 0.40304 ;
+scale -ws -r -p 0cm 0cm -0.544892cm 0.218899 1 1 ;
+move -r 0 0 0.10076 ;
+select -r UpperLip.cv[3] UpperLip.cv[15] ;
+scale -ws -r -p 0cm 0cm -0.725516cm 0.636657 1 1 ;
+select -cl  ;
+select -r UpperLip.cv[6:12] ;
+scale -ws -r -p 0cm 0cm 0.70934cm 1 1 -0.31209 ;
+move -r 0 0 -0.712517 ;
+move -r 0 0 -0.0791686 ;
+scale -ws -r -p 0cm 0cm -0.0823454cm 1 1 0.545423 ;
+select -cl  ;
+
+//Lower Lip
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 16 -ch 1 -n "LowerLip"; objectMoveCommand;
+scale -ws -r 1 1 0.684963 ;
+scale -ws -r 2.041121 1 1 ;
+move -r 0 0 0.107957 ;
+move -r 0 0 -0.107957 ;
+select -r LowerLip.cv[7] LowerLip.cv[11] ;
+scale -ws -r -p 0cm 0cm 0.496952cm 0.603324 1 1 ;
+select -r LowerLip.cv[9] ;
+move -r 0 0 0.0863657 ;
+select -r LowerLip.cv[6] LowerLip.cv[12] ;
+scale -ws -r -p 0cm 0cm 0.268948cm 0.903324 1 1 ;
+select -r LowerLip.cv[14] ;
+select -tgl LowerLip.cv[4] ;
+move -r 0 0 0.158337 ;
+scale -ws -r -p 0cm 0cm -0.110611cm 1.047768 1 1 ;
+select -r LowerLip.cv[0:3] LowerLip.cv[15] ;
+move -r 0 0 0.5038 ;
+scale -ws -r -p 0cm 0cm -0.0960737cm 1 1 -0.133284 ;
+move -r 0 0 0.0287886 ;
+select -r LowerLip ;
+move -r 0 0 0.0935628 ;
+select -r LowerLip ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Lip Controls (In and Out)
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1 -n "L_LowerLip"; objectMoveCommand;
+move -r -1.28669 0 0.138761 ;
+scale -ws -r 0.0985102 0.0985102 0.0985102 ;
+duplicate -rr;
+rename "L_LowerLip1" "L_UpperLip";
+move -r 0 0 -0.391053 ;
+select -r L_UpperLip ;
+select -tgl L_LowerLip ;
+duplicate -rr;
+setAttr "L_LowerLip1.translateX" 1.287;
+setAttr "L_UpperLip1.translateX" 1.287;
+rename "L_UpperLip1" "R_UpperLip";
+rename "L_LowerLip1" "R_LowerLip";
+select -r L_LowerLip L_UpperLip R_UpperLip R_LowerLip ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Cheek Controls
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1 -n "R_Cheek"; objectMoveCommand;
+move -r 2.687909 0 -1.975451 ;
+duplicate -rr;
+rename "R_Cheek1" "L_Cheek";
+setAttr "L_Cheek.translateX" -2.688;
+select -r R_Cheek ;
+select -tgl L_Cheek ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Eye Direction Control
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 12 -ch 1 -n "R_eye"; objectMoveCommand;
+move -r 0 0 -6.610002 ;
+move -r 2.536396 0 0 ;
+scale -ws -r 1 1 0.693652 ;
+select -r R_eye.cv[3] R_eye.cv[5] R_eye.cv[9] R_eye.cv[11];
+scale -ws -r -p 2.536396cm 0cm -6.610002cm 1 1 0.297459 ;
+select -r R_eye.cv[6:8] ;
+move -r 0 0 -0.200014 ;
+select -r R_eye ;
+duplicate -rr;
+rename "R_eye1" "L_eye";
+setAttr "L_eye.translateX" -2.25; 
+setAttr "L_eye.translateZ" -6.61;
+setAttr "R_eye.translateX" 2.25;
+setAttr "R_eye.translateZ" -6.61;
+setAttr "L_eye.scaleZ" 1.2;
+setAttr "L_eye.scaleX" 1.2;
+setAttr "L_eye.scaleY" 1.2;
+setAttr "R_eye.scaleZ" 1.2;
+setAttr "R_eye.scaleX" 1.2;
+setAttr "R_eye.scaleY" 1.2;
+select -r R_eye L_eye ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+group -em; xform -os -piv 0 0 0;
+rename "null1" "Eye_Direction";
+select -r R_eyeShape ;
+select -add L_eyeShape ;
+select -add Eye_Direction ;
+parent -r -s;
+select -r R_eye L_eye ;
+doDelete;
+move -r 0 0 -6.61 Eye_Direction.scalePivot Eye_Direction.rotatePivot ;
+
+//Squint Controls
+select -r R_MouthCorner ;
+duplicate -rr;
+select -r R_MouthCorner1 ;
+rename "R_MouthCorner1" "R_Squint";
+scale -ws -r 0.70307 0.70307 0.70307 ;
+move -r 1.483328 0 -6.674978 ;
+move -r -0.076277 0 0.0572078 ;
+duplicate -rr;
+setAttr "R_Squint1.scaleX" -0.703;
+setAttr "R_Squint1.translateX" -5.6;
+rename "R_Squint1" "L_Squint";
+
+//Brow, left, right and center
+
+//MID
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1 -n "CenterBrow"; objectMoveCommand;
+select -r CenterBrow ;
+scale -r 1 1 0.568297 ;
+setAttr "CenterBrow.translateZ" -9.5;
+
+//LEFT
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1 -n "LeftBrow"; objectMoveCommand;
+setAttr "LeftBrow.translateX" -2.5;
+setAttr "LeftBrow.translateZ" -9.5;
+scale -r 1 1 0.6198 ;
+select -r LeftBrow.cv[2:4] ;
+scale -r -p -3.445903cm 0cm -9.5cm 1 1 0.713533 ;
+move -r -1.825518 0 0.456379 ;
+select -r LeftBrow.cv[1] LeftBrow.cv[5] ;
+move -r -1.010555 0 -0.423781 ;
+select -r LeftBrow.cv[2:4] ;
+scale -r -p -5.271421cm 0cm -9.043621cm 1 1 0.846867 ;
+move -r -0.195591 0 0.22819 ;
+select -r LeftBrow.cv[1] LeftBrow.cv[5] ;
+scale -r -p -3.510555cm 0cm -9.923781cm 1 1 0.791311 ;
+move -r 0 0 -0.195591 ;
+move -r -0.325985 0 0 ;
+move -r 0 0 0.195591 ;
+
+//RIGHT
+select -r LeftBrow ;
+duplicate -rr;
+rename "LeftBrow1" "RightBrow";
+setAttr "RightBrow.translateX" 2.5;
+setAttr "RightBrow.scaleX" -1;
+
+//CleanUp
+select -r CenterBrow LeftBrow RightBrow ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Upper Lids
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 1 -n "Left_UL"; objectMoveCommand;
+move -r -2.412292 0 -8.149634 ;
+scale -r 1.465816 1 1 ;
+move -r 0 0 0.162993 ;
+select -r Left_UL.cv[4:6] ;
+scale -r -p -2.412292cm 0cm -7.040738cm 1 1 -2.581568 ;
+move -r 0 0 -0.358584 ;
+select -r Left_UL.cv[3] Left_UL.cv[7] ;
+move -r 0 0 0.749878 ;
+select -r Left_UL.cv[4] Left_UL.cv[6] ;
+scale -r -p -2.412292cm 0cm -6.980356cm 1.272043 1 1 ;
+select -r Left_UL ;
+rotate -r -ws 0 5.161408 0 ;
+move -r 0 0 -0.0961382 ;
+scale -r 1 1 0.812864 ;
+move -r 0 0 0.148066 ;
+duplicate -rr;
+rename "Left_UL1" "Right_UL";
+setAttr "Right_UL.translateX" 2.412;
+setAttr "Right_UL.rotateY" -5.161;
+select -r Left_UL Right_UL ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Lower_Lids
+
+//LEFT
+select -r Left_UL ;
+duplicate -rr;
+rename "Left_UL1" "Left_LL";
+setAttr "Left_LL.rotateY" 180;
+move -r 0 0 2.428276 ;
+rotate -r -os 0 -4.58259 0 ;
+scale -r 1 1 0.554247 ;
+scale -r 0.860337 1 1 ;
+move -r 0.118452 0 -0.0888394 ;
+select -cl  ;
+
+//RIGHT
+select -r Right_UL ;
+duplicate -rr;
+rename "Right_UL1" "Right_LL";
+setAttr "Right_LL.scaleX" .86;
+setAttr "Right_LL.scaleZ" .554;
+setAttr "Right_LL.rotateY" 185;
+move -r 0 0 2.339436 ;
+setAttr "Right_LL.translateX" -.118;
+
+//CleanUp
+select -r Left_LL Right_LL ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+
+//Jaw Control
+circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 24 -ch 1 -n "JawControl"; objectMoveCommand;
+scale -r 5.613834 1 1 ;
+select -r JawControl.cv[1] JawControl.cv[13] ;
+move -r 0 0 5.267053 ;
+select -r JawControl.cv[0] JawControl.cv[2] JawControl.cv[12] JawControl.cv[14] ;
+move -r 0 0 4.035242 ;
+select -r JawControl.cv[3] JawControl.cv[11] JawControl.cv[15] JawControl.cv[23] ;
+move -r 0 0 3.525527 ;
+select -r JawControl.cv[4] JawControl.cv[10] JawControl.cv[16] JawControl.cv[22] ;
+move -r 0 0 2.038859 ;
+select -r JawControl.cv[5] JawControl.cv[9] JawControl.cv[17] JawControl.cv[21] ;
+move -r 0 0 0.976953 ;
+select -r JawControl.cv[1] JawControl.cv[13] ;
+move -r 0 0 -0.877635 ;
+select -r JawControl ;
+move -r 0 0 -1.006699 ;
+scale -r 0.775188 0.775188 0.775188 ;
+move -r 0 0 1.038187 ;
+select -r JawControl.cv[6] ;
+select -tgl JawControl.cv[20] ;
+scale -r -p 0cm 0cm -0.17145cm 0.740933 1 1 ;
+select -r JawControl.cv[5] ;
+select -tgl JawControl.cv[21] ;
+scale -r -p 0cm 0cm 0.396764cm 0.863155 1 1 ;
+select -r JawControl.cv[5:6] JawControl.cv[20:21] ;
+scale -r -p 0cm 0cm 0.112657cm 1.052044 1 1 ;
+select -r JawControl.cv[4] JawControl.cv[22] ;
+scale -r -p 0cm 0cm 1.05755cm 1.063155 1 1 ;
+select -r JawControl.cv[10] ;
+select -tgl JawControl.cv[16] ;
+scale -r -p 0cm 0cm 2.166426cm 1.074266 1 1 ;
+scale -r -p 0cm 0cm 2.166426cm 1.085377 1 1 ;
+select -r JawControl.cv[9] ;
+select -tgl JawControl.cv[17] ;
+scale -r -p 0cm 0cm 1.180858cm 1.085377 1 1 ;
+select -r JawControl.cv[19] ;
+select -tgl JawControl.cv[7] ;
+move -r 0 0 -0.15947 ;
+select -r JawControl.cv[18] ;
+select -tgl JawControl.cv[8] ;
+move -r 0 0 0.139536 ;
+scale -r -p 0cm 0cm 0.373963cm 1.040933 1 1 ;
+select -r JawControl.cv[4] ;
+select -tgl JawControl.cv[22] ;
+select -r JawControl.cv[1] JawControl.cv[13] ;
+scale -r -p 0cm 0cm 3.434113cm 1 1 0.803467 ;
+select -cl  ;
+select -r JawControl.cv[1] JawControl.cv[13] ;
+move -r 0 0 -0.0598011 ;
+select -r JawControl ;
+move -r 0 0 3.093469 JawControl.scalePivot JawControl.rotatePivot ;
