@@ -1,0 +1,93 @@
+//FK- IK Switch
+
+//Make the letters F and K
+curve -d 1 -p 0 36 -8 -p 0 36 -11 -p 0 35 -11 -p 0 35 -9 -p 0 34 -9 -p 0 34 -10 -p 0 33 -10 -p 0 33 -9 -p 0 32 -9 -p 0 32 -9 -p 0 31 -9 -p 0 30 -9 -p 0 30 -8 -p 0 31 -8 -p 0 32 -8 -p 0 32 -8 -p 0 35 -8 -p 0 35 -8 -p 0 36 -8 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -n "F";
+select -d F ;
+curve -d 1 -p 0 36 -12 -p 0 30 -12 -p 0 30 -13 -p 0 32 -13 -p 0 30 -15 -p 0 31 -15 -p 0 33 -13 -p 0 36 -15 -p 0 36 -14 -p 0 34 -13 -p 0 36 -13 -p 0 36 -12 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -n "K";
+select -r K.cv[6] ;
+move -r 0 0 -0.552862 ;
+select -r K.cv[3] ;
+move -r 0 0.756548 0 ;
+select -r K.cv[4] ;
+move -r 0 0 0.669254 ;
+move -r -z 1.330746 ;
+move -r -z -1 ;
+select -r K.cv[5] ;
+move -r -y -1 ;
+select -r K.cv[6] ;
+move -r 0 0 -0.320078 ;
+select -r K.cv[9] ;
+move -r 0 -0.232784 0 ;
+select -r K.cv[6] ;
+select -tgl K.cv[3] ;
+select -r K.cv[3] K.cv[6] K.cv[9] ;
+move -r 0 -0.523764 0 ;
+select -cl;
+
+//combine to one shape
+select -r F K ;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0;
+group -em -n "FK_shape"; xform -os -piv 0 0 0;
+select -r curveShape1 ;
+select -add curveShape2 ;
+select -add FK_shape ;
+parent -r -s;
+select -r F K ;
+doDelete;
+
+//Duplicate to make the letters I and K
+select -r FK_shape;
+duplicate -rr;
+move -rpr -z -10 ;
+select -r FK_shape1|curveShape1.cv[12] ;
+move -r -z 2 ;
+select -r FK_shape1|curveShape1.cv[11] ;
+move -r -z -2 ;
+select -r FK_shape1|curveShape1.cv[10] ;
+move -r -z -2 ;
+select -r FK_shape1|curveShape1.cv[13] ;
+move -r -z 2 ;
+select -r FK_shape1|curveShape1.cv[14] ;
+move -r -y -1 ;
+select -r FK_shape1|curveShape1.cv[8] ;
+move -r -y -1 ;
+select -cl  ;
+select -r FK_shape1|curveShape1.cv[9] ;
+move -r -y -1 ;
+select -cl  ;
+select -r FK_shape1|curveShape1.cv[10:11] ;
+move -r -z 2 ;
+move -r -z -1 ;
+select -r FK_shape1|curveShape1.cv[12:13] ;
+move -r -z -1 ;
+select -r FK_shape1|curveShape1.cv[5:6] ;
+move -r -z 1 ;
+select -r FK_shape1|curveShape1.cv[0] ;
+select -r FK_shape1|curveShape1.cv[0] FK_shape1|curveShape1.cv[18] ;
+move -r -z 1 ;
+select -r FK_shape1|curveShape1.cv[1:2] ;
+move -r -z 1 ;
+select -r FK_shape1|curveShape1.cv[16] ;
+select -cl  ;
+select -r FK_shape1|curveShape1.cv[16] ;
+move -r -z 1 ;
+select -r FK_shape1|curveShape1.cv[17] ;
+move -r -z 2 ;
+select -r FK_shape1|curveShape1.cv[16] ;
+move -r -z -1 ;
+select -r FK_shape1|curveShape1.cv[17] ;
+move -r -z -1 ;
+select -cl  ;
+select -r FK_shape1 ;
+rename "FK_shape1" "IK_shape";
+
+//Create Blendshape
+select -r IK_shape ;
+select -tgl FK_shape ;
+blendShape -tc 0 -n "FK_IK SWITCH";
+select -r IK_shape ;
+doDelete;
+rename "FK_shape" "FK_IK_SWITCH_CNTRL";
+
+
+//FINISH THIS SCRIPT BY CENTERING AND ADDING ATTRIBUTES!
